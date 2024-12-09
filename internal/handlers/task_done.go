@@ -2,12 +2,13 @@ package handlers
 
 import (
 	"encoding/json"
-	"go_final_project/internal/models"
-	"go_final_project/internal/service"
 	"log"
 	"net/http"
 	"strconv"
 	"time"
+
+	"go_final_project/internal/models"
+	"go_final_project/internal/service"
 )
 
 func (h *Handler) TaskDone(w http.ResponseWriter, r *http.Request) {

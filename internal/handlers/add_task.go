@@ -4,11 +4,12 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"go_final_project/internal/models"
-	"go_final_project/internal/service"
 	"log"
 	"net/http"
 	"time"
+
+	"go_final_project/internal/models"
+	"go_final_project/internal/service"
 )
 
 func (h *Handler) AddTask(w http.ResponseWriter, r *http.Request) {
@@ -90,7 +91,7 @@ func CheckForm(task *models.Task) error {
 	}
 	//если дата не указана
 	if task.Date == "" {
-		task.Date = time.Now().Format("20060102")
+		task.Date = time.Now().Format(DateFormat)
 	}
 	//если есть правило повторения
 	if task.Repeat != "" {
@@ -98,17 +99,17 @@ func CheckForm(task *models.Task) error {
 		if err != nil {
 			return err
 		}
-		parsedDate, _ := time.Parse("20060102", task.Date) // пропускаем ошибку, тк она вернется в предыдущем шаге
-		if parsedDate.Compare(time.Now()) == -1 && task.Date != time.Now().Format("20060102") {
+		parsedDate, _ := time.Parse(DateFormat, task.Date) // пропускаем ошибку, тк она вернется в предыдущем шаге
+		if parsedDate.Compare(time.Now()) == -1 && task.Date != time.Now().Format(DateFormat) {
 			task.Date = newDate
 		}
 	} else { //если правила нет
-		parsedDate, err := time.Parse("20060102", task.Date)
+		parsedDate, err := time.Parse(DateFormat, task.Date)
 		if err != nil {
 			return err
 		}
 		if parsedDate.Compare(time.Now()) == -1 {
-			task.Date = time.Now().Format("20060102")
+			task.Date = time.Now().Format(DateFormat)
 		}
 	}
 	return nil

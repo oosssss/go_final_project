@@ -12,7 +12,7 @@ func InitDB(dbFile string) (*sql.DB, error) {
 	var install bool
 
 	if _, err := os.Open(dbFile); err != nil { // если нет БД файла
-		file, err := os.Create("scheduler.db") // создаем файл
+		file, err := os.Create(dbFile) // создаем файл
 		if err != nil {
 			return nil, fmt.Errorf("failed to create db file: %v", err)
 		}

@@ -3,10 +3,11 @@ package handlers
 import (
 	"bytes"
 	"encoding/json"
-	"go_final_project/internal/models"
 	"log"
 	"net/http"
 	"strconv"
+
+	"go_final_project/internal/models"
 )
 
 func (h *Handler) EditTask(w http.ResponseWriter, r *http.Request) {

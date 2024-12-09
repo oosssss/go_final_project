@@ -1,16 +1,18 @@
 package handlers
 
 import (
-	"go_final_project/internal/service"
 	"log"
 	"net/http"
 	"time"
+
+	"go_final_project/internal/service"
 )
 
 func HandleNextDate(w http.ResponseWriter, r *http.Request) {
-	now, err := time.Parse("20060102", r.FormValue("now"))
+	now, err := time.Parse(DateFormat, r.FormValue("now"))
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return
 	}
 	date := r.FormValue("date")
 	repeat := r.FormValue("repeat")
@@ -18,7 +20,8 @@ func HandleNextDate(w http.ResponseWriter, r *http.Request) {
 	newDate, err := service.NextDate(now, date, repeat)
 	if err != nil {
 		w.Write([]byte(err.Error()))
-	} else {
-		w.Write([]byte(newDate))
+		return
 	}
+
+	w.Write([]byte(newDate))
 }

@@ -10,18 +10,20 @@ func (r *Repository) SearchTasks(search string, searchByDate bool) ([]models.Tas
 	var rows *sql.Rows
 	var query string
 	if !searchByDate {
-		query = `SELECT * FROM scheduler
+		query = `SELECT id, date, title, comment, repeat 
+				 FROM scheduler
 				 WHERE LOWER(title) LIKE LOWER(:search)
 				 OR LOWER(comment) LIKE LOWER(:search)
-			  	 ORDER BY date LIMIT 50`
+			  	 ORDER BY date LIMIT :limit`
 		search = "%" + search + "%"
 	} else {
-		query = `SELECT * FROM scheduler
+		query = `SELECT id, date, title, comment, repeat 
+				 FROM scheduler
 				 WHERE date = :search
-			     ORDER BY date LIMIT 50`
+			     ORDER BY date LIMIT :limit`
 	}
 
-	rows, err := r.db.Query(query, sql.Named("search", search))
+	rows, err := r.db.Query(query, sql.Named("search", search), sql.Named("limit", Limit))
 	if err != nil {
 		return tasks, err
 	}
@@ -36,6 +38,10 @@ func (r *Repository) SearchTasks(search string, searchByDate bool) ([]models.Tas
 		}
 
 		tasks = append(tasks, task)
+	}
+	if err = rows.Err(); err != nil {
+		// если ошибка в цикле rows.Next()
+		return tasks, err
 	}
 
 	return tasks, nil

@@ -1,12 +1,14 @@
 package repository
 
 import (
+	"database/sql"
 	"go_final_project/internal/models"
 )
 
 func (r *Repository) SelectAllTasks() ([]models.Task, error) {
 	var tasks = []models.Task{}
-	rows, err := r.db.Query("SELECT * FROM scheduler ORDER BY date LIMIT 50")
+	rows, err := r.db.Query(`SELECT id, date, title, comment, repeat 
+							 FROM scheduler ORDER BY date LIMIT :limit`, sql.Named("limit", Limit))
 	if err != nil {
 		return tasks, err
 	}

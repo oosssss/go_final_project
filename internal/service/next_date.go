@@ -7,13 +7,15 @@ import (
 	"time"
 )
 
+const DateFormat = "20060102"
+
 // возвращает следующее значение даты задачи в соответствии с правилом повторения
 func NextDate(now time.Time, date string, repeat string) (NewDate string, Err error) {
 	//разделяем правило по пробелам
 	rulesList := strings.Fields(repeat)
 
 	//проверяем парсится ли date
-	parsedDate, err := time.Parse("20060102", date)
+	parsedDate, err := time.Parse(DateFormat, date)
 	if err != nil {
 		return NewDate, fmt.Errorf("failed to convert date")
 	}
@@ -32,7 +34,7 @@ func NextDate(now time.Time, date string, repeat string) (NewDate string, Err er
 				diffYears = now.Year() - parsedDate.Year()
 			}
 			parsedDate = parsedDate.AddDate(diffYears, 0, 0)
-			NewDate = parsedDate.Format("20060102")
+			NewDate = parsedDate.Format(DateFormat)
 			return NewDate, nil
 		}
 	case "d":
@@ -49,7 +51,7 @@ func NextDate(now time.Time, date string, repeat string) (NewDate string, Err er
 			if !changeFlag {
 				parsedDate = parsedDate.AddDate(0, 0, nDays)
 			}
-			NewDate = parsedDate.Format("20060102")
+			NewDate = parsedDate.Format(DateFormat)
 			return NewDate, nil
 		}
 	case "w":
@@ -83,7 +85,7 @@ func NextDate(now time.Time, date string, repeat string) (NewDate string, Err er
 				}
 
 			}
-			NewDate = rDate.AddDate(0, 0, minDiff).Format("20060102")
+			NewDate = rDate.AddDate(0, 0, minDiff).Format(DateFormat)
 			return NewDate, nil
 		}
 	case "m":
@@ -168,7 +170,7 @@ func NextDate(now time.Time, date string, repeat string) (NewDate string, Err er
 						i++
 						continue
 					}
-					NewDate = midDate.Format("20060102")
+					NewDate = midDate.Format(DateFormat)
 					return NewDate, nil
 				}
 			}

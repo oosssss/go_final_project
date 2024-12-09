@@ -2,10 +2,11 @@ package handlers
 
 import (
 	"encoding/json"
-	"go_final_project/internal/models"
 	"log"
 	"net/http"
 	"time"
+
+	"go_final_project/internal/models"
 )
 
 func (h *Handler) ShowTasks(w http.ResponseWriter, r *http.Request) {
@@ -37,7 +38,7 @@ func (h *Handler) ShowTasks(w http.ResponseWriter, r *http.Request) {
 		}
 	} else if date, err := time.Parse("02.01.2006", search); err == nil { // если ищут по дате
 		searchByDate = true
-		search = date.Format("20060102")
+		search = date.Format(DateFormat)
 		tasks, err := h.repo.SearchTasks(search, searchByDate)
 		tasksAnswer.Tasks = []models.Task{}
 		tasksAnswer.Tasks = append(tasksAnswer.Tasks, tasks...)

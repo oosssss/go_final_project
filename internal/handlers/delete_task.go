@@ -2,10 +2,11 @@ package handlers
 
 import (
 	"encoding/json"
-	"go_final_project/internal/models"
 	"log"
 	"net/http"
 	"strconv"
+
+	"go_final_project/internal/models"
 )
 
 func (h *Handler) DeleteTask(w http.ResponseWriter, r *http.Request) {

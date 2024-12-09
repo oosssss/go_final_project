@@ -1,16 +1,16 @@
 package main
 
 import (
-	"fmt"
-	"go_final_project/internal/db"
-	"go_final_project/internal/handlers"
-	"go_final_project/internal/repository"
 	"log"
 	"net/http"
 	"os"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/joho/godotenv"
+
+	"go_final_project/internal/db"
+	"go_final_project/internal/handlers"
+	"go_final_project/internal/repository"
 )
 
 func main() {
@@ -22,11 +22,11 @@ func main() {
 	//получаем порт
 	port := os.Getenv("TODO_PORT")
 	if port == "" {
-		log.Fatal("Необходимо настроить переменную окружения TODO_PORT")
+		log.Println("Необходимо настроить переменную окружения TODO_PORT")
+		port = "8080"
 	}
 
-	workDir, _ := os.Getwd()
-	//dbFile := filepath.Join(workDir, "scheduler.db")
+	//workDir, _ := os.Getwd()
 	dbFile := os.Getenv("TODO_DBFILE")
 	if dbFile == "" {
 		log.Fatal("Необходимо настроить переменную окружения TODO_DBFILE")
@@ -44,7 +44,8 @@ func main() {
 	handlerTask := handlers.New(repo)
 
 	r := chi.NewRouter()
-	r.Handle("/*", http.FileServer(http.Dir(fmt.Sprintf("%s/web/", workDir))))
+	//r.Handle("/*", http.FileServer(http.Dir(fmt.Sprintf("%s/web/", workDir))))
+	r.Handle("/*", http.FileServer(http.Dir("./web/")))
 	r.Get("/api/nextdate", handlers.HandleNextDate)
 	r.Post("/api/task", handlerTask.AddTask)
 	r.Get("/api/task", handlerTask.GetTask)
